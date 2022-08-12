@@ -1,4 +1,4 @@
-package com.example.financialappserver;
+package com.jared.financialappserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

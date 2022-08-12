@@ -1,4 +1,4 @@
-package com.example.financialappserver;
+package com.jared.financialappserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
