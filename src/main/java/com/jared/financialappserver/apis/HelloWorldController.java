@@ -15,4 +15,9 @@ public class HelloWorldController {
         return HelloWorldHandler.handleRequest();
     }
 
+    @RequestMapping("/twoPlusTwo")
+    public int twoPlusTwo(){
+        return 4;
+    }
+
 }
