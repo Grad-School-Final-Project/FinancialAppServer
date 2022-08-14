@@ -21,7 +21,7 @@ public class HelloWorldController {
 
     @PutMapping("/moneyApi/convertCurrency")
     public int convertCurrency(){
-        return 7;
+        return 8;
     }
 
 }
