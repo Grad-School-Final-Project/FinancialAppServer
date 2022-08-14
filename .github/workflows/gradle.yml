@@ -49,7 +49,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: test with Gradle
         env:
-            DB_HOST: postgres
+            DB_HOST: localhost
             DB_PORT: 5432
             DB_USER: postgres
             DB_NAME: postgres
