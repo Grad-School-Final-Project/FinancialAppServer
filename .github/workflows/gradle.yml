@@ -20,6 +20,22 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    
+        # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v3
@@ -28,6 +44,15 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - env:
+          # The hostname used to communicate with the PostgreSQL service container
+          DB_HOST: postgres
+          # The default PostgreSQL port
+          DB_PORT: 5432
+          DB_USER: postgres
+          DB_NAME: postgres
+          DB_PASSWORD: postgres
+          PORT: 8080
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
     - name: test with Gradle
