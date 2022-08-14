@@ -44,16 +44,15 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - env:
-            # The hostname used to communicate with the PostgreSQL service container
+      
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+      - name: test with Gradle
+        env:
             DB_HOST: postgres
-            # The default PostgreSQL port
             DB_PORT: 5432
             DB_USER: postgres
             DB_NAME: postgres
             DB_PASSWORD: postgres
             PORT: 8080
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: test with Gradle
         run: ./gradlew build
