@@ -8,7 +8,6 @@ public class HelloWorldHandlerTest {
 
     @Test
     public void handleRequestTest(){
-        assertTrue(HelloWorldHandler.handleRequest().contains("Hello"));
-
+        assertTrue(HelloWorldHandler.handleRequest("john").contains("Hello"));
     }
 }
