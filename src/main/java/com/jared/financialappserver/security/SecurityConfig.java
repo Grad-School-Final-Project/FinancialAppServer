@@ -1,7 +1,5 @@
 package com.jared.financialappserver.security;
 
-import org.keycloak.adapters.KeycloakConfigResolver;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
      * Registers the KeycloakAuthenticationProvider with the authentication manager.
      */
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(keycloakAuthenticationProvider());
     }
 
@@ -42,8 +40,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     {
         super.configure(http);
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**").authenticated()
+                .antMatchers("/secured/**").authenticated()
                 .anyRequest().permitAll();
     }
 

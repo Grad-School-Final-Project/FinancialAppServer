@@ -1,4 +1,4 @@
-package com.jared.financialappserver.apihandlers;
+package com.jared.financialappserver.apis.handlers;
 
 public class HelloWorldHandler {
 
