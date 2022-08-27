@@ -1,4 +1,4 @@
-package com.jared.financialappserver.apis.controllers.secured.unsecured;
+package com.jared.financialappserver.apis.controllers;
 
 import com.jared.financialappserver.apis.handlers.UserHandler;
 import com.jared.financialappserver.apis.requests.CreateUserRequest;

@@ -1,4 +1,4 @@
-package com.jared.financialappserver.apis.controllers.secured.unsecured;
+package com.jared.financialappserver.apis.controllers;
 
 import com.jared.financialappserver.apis.handlers.HelloWorldHandler;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
     private static final Logger logger = LogManager.getLogger(HelloWorldController.class);
 
-    @GetMapping("/secured/hello")
+    @GetMapping("/hello")
     public String helloWorld(){
         logger.trace("Hello world api called, calling handler");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
