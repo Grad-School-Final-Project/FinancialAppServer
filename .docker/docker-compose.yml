@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:14.4-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '${POSTGRES_PORT}:5432'
+  keycloak:
+    environment:
+      KEYCLOAK_ADMIN : ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    image: quay.io/keycloak/keycloak:19.0.1
+    ports:
+      - "${KEYCLOAK_PORT}:8080"
+    restart: unless-stopped
+    command: start-dev
