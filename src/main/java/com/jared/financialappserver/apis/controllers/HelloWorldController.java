@@ -1,6 +1,6 @@
-package com.jared.financialappserver.apis.unsecured;
+package com.jared.financialappserver.apis.controllers;
 
-import com.jared.financialappserver.apihandlers.HelloWorldHandler;
+import com.jared.financialappserver.apis.handlers.HelloWorldHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.keycloak.KeycloakPrincipal;
