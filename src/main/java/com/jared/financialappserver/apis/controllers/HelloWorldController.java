@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Currency;
+
 @RestController
 public class HelloWorldController {
     private static final Logger logger = LogManager.getLogger(HelloWorldController.class);

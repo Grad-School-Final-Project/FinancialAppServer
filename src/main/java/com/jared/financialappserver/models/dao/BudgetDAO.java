@@ -1,6 +1,6 @@
 package com.jared.financialappserver.models.dao;
 
-import com.jared.financialappserver.models.dto.UserDTO;
+import com.jared.financialappserver.models.dto.TransactionDTO;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +8,5 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface UserDAO extends CrudRepository<UserDTO, String> {
-    public UserDTO findUserDTOByUsername(String username);
+public interface BudgetDAO extends CrudRepository<TransactionDTO, Integer> {
 }

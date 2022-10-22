@@ -27,4 +27,9 @@ public class UserDTO {
     @Column(name = "last_name")
     private String lastName;
 
+
+    public static UserDTO getGenericUser(){
+        return new UserDTOBuilder().firstName("ALL").lastName("ALL").username("ALL").build();
+    }
+
 }

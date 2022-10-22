@@ -1,5 +1,6 @@
 package com.jared.financialappserver.util;
 
+import com.jared.financialappserver.models.dto.UserDTO;
 import lombok.Getter;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.KeycloakPrincipal;
@@ -11,6 +12,8 @@ import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
+
+import javax.ws.rs.NotAuthorizedException;
 
 
 @Configuration
@@ -58,4 +61,15 @@ public class KeycloakUtil {
 
         return accessToken.getPreferredUsername();
     }
+
+    public static void verifyRequest(Authentication auth, UserDTO user) {
+        String username = getUsernameFromJWT(auth);
+//        if(! username.equals(user.getUsername())){
+//            // The authenticated user is trying to make changes to another users
+//            // account.
+//            throw new NotAuthorizedException("Not authorized");
+//        }
+    }
+
+
 }
