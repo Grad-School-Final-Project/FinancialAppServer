@@ -21,4 +21,8 @@ jobs:
     - name: ls
       run: ls -la
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --build-arg JAR_FILE=build/libs/\*.jar --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --build-arg JAR_FILE=build/libs/\*.jar --tag hamjared/financialapp:master
+    - name: Push the Docker image
+      run: docker push hamjared/financialapp:master
+      
+      
