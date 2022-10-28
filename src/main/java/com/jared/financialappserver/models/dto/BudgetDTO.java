@@ -3,6 +3,7 @@ package com.jared.financialappserver.models.dto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "budget",
@@ -30,4 +31,6 @@ public class BudgetDTO {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryDTO associated_category;
+
+    private double monthlyAmount;
 }

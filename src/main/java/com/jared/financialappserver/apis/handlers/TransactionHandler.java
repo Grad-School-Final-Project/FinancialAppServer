@@ -12,9 +12,11 @@ import com.jared.financialappserver.models.dto.csvFormats.CSVToTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.catalina.User;
 
 import javax.persistence.PersistenceException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -40,8 +42,14 @@ public class TransactionHandler implements TransactionAPI {
         if(categoryDTOOptional.isEmpty()){
             throw new PersistenceException("Category with ID: " + transaction.getCategory().getCategory_id() + " not  found");
         }
+
+        Optional<AccountDTO> optionalAccountDTO = accountDAO.findById(transaction.getAssociatedAccount().getAccount_id());
+        if(optionalAccountDTO.isEmpty())
+        {
+            throw new PersistenceException("Account with ID: " + transaction.getAssociatedAccount().getAccount_id() + " not found");
+        }
+        transaction.setUser(optionalAccountDTO.get().getUser());
         transaction.setCategory(categoryDTOOptional.get());
-        transaction.setUser(transaction.getAssociatedAccount().getUser());
         dao.save(transaction);
         return transaction;
     }
@@ -71,6 +79,9 @@ public class TransactionHandler implements TransactionAPI {
         }
         List<TransactionDTO> dtos = CSVToTransaction.createTransactionsFromCSV(
                 csv.toString(), account.get(), request.getCurrencyCode(), new HashMap<>());
+        for(TransactionDTO dto : dtos){
+            dto.setCategory(categoryDAO.findById(dto.getCategory().getCategory_id()).get());
+        }
         dao.saveAll(dtos);
         return dtos;
     }
@@ -120,6 +131,12 @@ public class TransactionHandler implements TransactionAPI {
 
     @Override
     public List<TransactionDTO> getBudgetTransactions(BudgetDTO budget) {
-        return null;
+
+        Optional<CategoryDTO> categoryDTO = categoryDAO.findById(budget.getAssociated_category().getCategory_id());
+        if(categoryDTO.isEmpty()){
+            throw new PersistenceException("Unable to find category with id: " + budget.getAssociated_category().getCategory_id());
+        }
+
+        return dao.findTransactionDTOSByCategory(categoryDTO.get());
     }
 }

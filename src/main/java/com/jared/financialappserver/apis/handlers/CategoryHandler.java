@@ -34,14 +34,20 @@ public class CategoryHandler implements CategoryAPI {
 
     @Override
     public CategoryDTO createCategory(CreateCategoryRequest request) {
-        Optional<CategoryDTO> optional = categoryDAO.findById(request.getParentCategoryId());
-        CategoryDTO categoryToCreate = request.getCategoryDTO();
-        if(optional.isEmpty()){
-            categoryToCreate.setParentCategory(null);
+
+        CategoryDTO categoryToCreate = new CategoryDTO();
+        categoryToCreate.setCategory_name(request.getCategoryDTO().getCategory_name());
+        categoryToCreate.setUser(request.getCategoryDTO().getUser());
+        if(request.getParentCategoryId() != null){
+            Optional<CategoryDTO> optional = categoryDAO.findById(request.getParentCategoryId());
+            if(optional.isEmpty()){
+                categoryToCreate.setParentCategory(null);
+            }
+            else{
+                categoryToCreate.setParentCategory(optional.get());
+            }
         }
-        else{
-            categoryToCreate.setParentCategory(optional.get());
-        }
+
         return categoryDAO.save(categoryToCreate);
     }
 
