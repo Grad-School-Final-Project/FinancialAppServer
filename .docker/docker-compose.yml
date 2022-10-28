@@ -20,6 +20,7 @@ services:
     depends_on:
       - postgres
       - keycloak
+    image: hamjared/financialapp:master
     environment:
       - DB_HOST=postgresDB
       - DB_NAME=${DB_NAME}
