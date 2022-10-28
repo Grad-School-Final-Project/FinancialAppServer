@@ -17,4 +17,4 @@ jobs:
     - name: Build the Jar
       run: chmod +x ./gradlew
     - name: Build the Docker image
-      run: docker build . --file .docker/Dockerfile --build-arg JAR_FILE=build/libs/\*.jar --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --build-arg JAR_FILE=build/libs/\*.jar --tag my-image-name:$(date +%s)
