@@ -24,7 +24,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --build-arg JAR_FILE=build/libs/\*.jar --tag hamjared/financialapp:master
     - name: Login to Docker Hub
-      run: docker login -u="hamjared" -p=${secrets.DOCKER_HUB}
+      run: docker login -u="hamjared" -p=${{ secrets.DOCKER_HUB }}
     - name: Push the Docker image
       run: docker push hamjared/financialapp:master
       
