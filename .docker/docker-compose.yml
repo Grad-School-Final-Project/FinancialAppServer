@@ -18,7 +18,7 @@ services:
     command: start-dev
   springServer:
     depends_on:
-      - postgres
+      - postgresDB
       - keycloak
     image: hamjared/financialapp:master
     environment:
