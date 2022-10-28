@@ -12,5 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateCategoryRequest {
     CategoryDTO categoryDTO;
+
     Integer parentCategoryId;
+
 }

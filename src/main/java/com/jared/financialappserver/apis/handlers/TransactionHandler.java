@@ -18,6 +18,7 @@ import javax.persistence.PersistenceException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -131,12 +132,12 @@ public class TransactionHandler implements TransactionAPI {
 
     @Override
     public List<TransactionDTO> getBudgetTransactions(BudgetDTO budget) {
-
         Optional<CategoryDTO> categoryDTO = categoryDAO.findById(budget.getAssociated_category().getCategory_id());
         if(categoryDTO.isEmpty()){
             throw new PersistenceException("Unable to find category with id: " + budget.getAssociated_category().getCategory_id());
         }
 
         return dao.findTransactionDTOSByCategory(categoryDTO.get());
+
     }
 }

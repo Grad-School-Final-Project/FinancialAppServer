@@ -34,7 +34,6 @@ public class CategoryHandler implements CategoryAPI {
 
     @Override
     public CategoryDTO createCategory(CreateCategoryRequest request) {
-
         CategoryDTO categoryToCreate = new CategoryDTO();
         categoryToCreate.setCategory_name(request.getCategoryDTO().getCategory_name());
         categoryToCreate.setUser(request.getCategoryDTO().getUser());
