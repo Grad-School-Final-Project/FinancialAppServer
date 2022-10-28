@@ -36,7 +36,7 @@ public class TransactionControllerAPI implements TransactionAPI {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public TransactionDTO createTransaction(@RequestBody TransactionDTO transaction) {
 //        KeycloakUtil.verifyRequest(SecurityContextHolder.getContext().getAuthentication(), transaction.getAssociatedAccount().getUser());
-        TransactionHandler handler = new TransactionHandler(transactionDAO, categoryDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
         return handler.createTransaction(transaction);
     }
 
@@ -49,7 +49,7 @@ public class TransactionControllerAPI implements TransactionAPI {
                     SecurityContextHolder.getContext().getAuthentication(),
                     transaction.getAssociatedAccount().getUser());
         }
-        TransactionHandler handler = new TransactionHandler(transactionDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
         return handler.createTransactions(transactions);
     }
 

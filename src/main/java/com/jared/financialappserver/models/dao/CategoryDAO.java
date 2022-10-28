@@ -17,4 +17,6 @@ public interface CategoryDAO extends CrudRepository<CategoryDTO, Integer> {
 
     List<CategoryDTO> findCategoryDTOSByUser(UserDTO user);
 
+    List<CategoryDTO> findCategoryDTOByParentCategory(CategoryDTO parentCategory);
+
 }

@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "budget",
         uniqueConstraints = {@UniqueConstraint(columnNames ={"user_id","nickname"})})
@@ -30,4 +32,6 @@ public class BudgetDTO {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryDTO associated_category;
+
+    private double monthlyAmount;
 }
