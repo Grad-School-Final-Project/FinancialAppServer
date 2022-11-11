@@ -4,9 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.Instant;
 
 @Entity
-@Table(name = "stockData" )
+@Table(name = "stock_data",
+        uniqueConstraints = {@UniqueConstraint(columnNames ={"stock_ticker","instant"})} )
 @Builder
 @Getter
 @Setter
@@ -21,24 +23,11 @@ public class StockDataDTO {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name = "stock_ticker", nullable = false)
     private StockDTO stock;
 
-    private Date date;
+    private Instant instant;
 
     private double price;
-
-    private double marketCap;
-
-    private String recommendation;
-
-    private double targetHighPrice;
-
-    private double targetLowPrice;
-
-    private double privateMedianPrice;
-
-    private double lastDividendAmount;
-
-    private double currentDividendYield;
 
 }

@@ -3,10 +3,9 @@ package com.jared.financialappserver.models.dto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Entity
-@Table(name = "stockDividend" )
+@Table(name = "brokerage_transaction")
 @Builder
 @Getter
 @Setter
@@ -14,16 +13,19 @@ import java.sql.Date;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockDividendDTO {
-
+public class BrokerageTransactionDTO{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @ManyToOne
-    private StockDTO stock;
+    private AccountDTO accountDTO;
 
-    private Date date;
+    @ManyToOne
+    private StockDTO stockDTO;
 
-    private double dividend;
+    double unitsPurchased;
+
+    double pricePerUnit;
+
 }
