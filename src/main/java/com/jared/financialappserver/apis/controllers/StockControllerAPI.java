@@ -39,6 +39,6 @@ public class StockControllerAPI {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<UserStockResponse> getUserStocks(@RequestBody UserDTO user)
     {
-        return new StockHandler(brokerageTransactionDAO, stockDAO, accountDAO, userDAO, stockDataDAO).getUserStocks();
+        return new StockHandler(brokerageTransactionDAO, stockDAO, accountDAO, userDAO, stockDataDAO).getUserStocks(user);
     }
 }

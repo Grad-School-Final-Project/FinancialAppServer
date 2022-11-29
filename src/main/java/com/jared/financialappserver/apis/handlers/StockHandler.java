@@ -1,18 +1,17 @@
 package com.jared.financialappserver.apis.handlers;
 
+import com.google.common.base.Ticker;
 import com.jared.financialappserver.apis.controllers.responses.UserStockResponse;
 import com.jared.financialappserver.apis.requests.stockApi.AddStockPurchaseRequest;
 import com.jared.financialappserver.models.dao.*;
-import com.jared.financialappserver.models.dto.AccountDTO;
-import com.jared.financialappserver.models.dto.BrokerageTransactionDTO;
-import com.jared.financialappserver.models.dto.StockDTO;
+import com.jared.financialappserver.models.dto.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.util.Pair;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class StockHandler {
@@ -53,12 +52,12 @@ public class StockHandler {
         return brokerageTransactionDTO;
     }
 
-    public List<UserStockResponse> getUserStocks() {
+    public List<UserStockResponse> getUserStocks(UserDTO user) {
 
         List<UserStockResponse> response = new ArrayList<>();
-        String[] tickers = {"AAPL", "AMZN", "AMD", "TSLA"};
+        Map<String, StockUserOwnership> tickers = getUserStockOwnership(user);
 
-        for(String ticker : tickers)
+        for(String ticker : tickers.keySet())
         {
             StockDataHandler stockData = new StockDataHandler(stockDataDAO);
             Optional<StockDTO> stockDTO = stockDAO.findById(ticker);
@@ -70,15 +69,42 @@ public class StockHandler {
 
             UserStockResponse userStock = UserStockResponse.builder()
                     .stockTicker(ticker)
-                    .totalPricePaid(9*price - 10)
+                    .totalPricePaid(tickers.get(ticker).getNetPricePaid())
                     .currentPrice(price)
-                    .sharesOwned(9)
+                    .sharesOwned(tickers.get(ticker).getNumberSharesOwned())
                     .build();
             response.add(userStock);
         }
 
 
         return response;
+    }
+
+    private Map<String, StockUserOwnership> getUserStockOwnership(UserDTO user) {
+        Map<String, StockUserOwnership> stockTickerToNumberOwned = new HashMap<>();
+
+        Iterable<BrokerageTransactionDTO> all = brokerageTransactionDAO.findAll();
+        List<BrokerageTransactionDTO> allBrokerageTransactions = new ArrayList<>();
+        for(BrokerageTransactionDTO bt : all){
+            allBrokerageTransactions.add(bt);
+        }
+
+        List<BrokerageTransactionDTO> userStockTransactions = allBrokerageTransactions.stream()
+                .filter(t -> t.getAccountDTO().getUser().getUsername().equals(user.getUsername()))
+                .collect(Collectors.toList());
+        for(BrokerageTransactionDTO userTransaction : userStockTransactions)
+        {
+            String ticker = userTransaction.getStockDTO().getTicker();
+            if(stockTickerToNumberOwned.get(ticker) == null){
+                stockTickerToNumberOwned.put(ticker, new StockUserOwnership());
+            }
+
+            stockTickerToNumberOwned.get(ticker).addToNumberSharesOwned(userTransaction.getUnitsPurchased());
+            stockTickerToNumberOwned.get(ticker).addToNetPricePaid(
+                    userTransaction.getUnitsPurchased()*userTransaction.getPricePerUnit());
+        }
+
+        return stockTickerToNumberOwned;
     }
 
 }
