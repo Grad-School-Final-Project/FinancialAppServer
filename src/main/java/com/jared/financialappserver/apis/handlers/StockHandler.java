@@ -106,5 +106,4 @@ public class StockHandler {
 
         return stockTickerToNumberOwned;
     }
-
 }
