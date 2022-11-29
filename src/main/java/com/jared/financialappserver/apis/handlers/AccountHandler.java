@@ -32,16 +32,20 @@ public class AccountHandler implements AccountAPI {
     @Override
     public AccountDTO addAccount(CreateAccountRequest request) {
         AccountDTO createdAccount = accountDAO.save(request.getAccountDTO());
-        TransactionDTO initialBalanceTransaction = TransactionDTO.builder()
-                .associatedAccount(createdAccount)
-                .notes("")
-                .amount(request.getInitialBalance())
-                .currency("USD")
-                .description("Initial Balance Transaction")
-                .category(CategoryDTO.getHideFromBudgetsCategory())
-                .date(new Date(Calendar.getInstance().getTimeInMillis()))
-                .build();
-        transactionDAO.save(initialBalanceTransaction);
+        if(request.getAccountDTO().getAccount_type() != AccountTypeEnum.BROKERAGE)
+        {
+            TransactionDTO initialBalanceTransaction = TransactionDTO.builder()
+                    .associatedAccount(createdAccount)
+                    .notes("")
+                    .amount(request.getInitialBalance())
+                    .currency("USD")
+                    .description("Initial Balance Transaction")
+                    .category(CategoryDTO.getHideFromBudgetsCategory())
+                    .date(new Date(Calendar.getInstance().getTimeInMillis()))
+                    .build();
+            transactionDAO.save(initialBalanceTransaction);
+        }
+
 
         return createdAccount;
     }
