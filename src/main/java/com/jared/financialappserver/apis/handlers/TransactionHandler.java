@@ -7,6 +7,7 @@ import com.jared.financialappserver.apis.requests.transactionAPI.UpdateTransacti
 import com.jared.financialappserver.models.dao.AccountDAO;
 import com.jared.financialappserver.models.dao.CategoryDAO;
 import com.jared.financialappserver.models.dao.TransactionDAO;
+import com.jared.financialappserver.models.dao.UserDAO;
 import com.jared.financialappserver.models.dto.*;
 import com.jared.financialappserver.models.dto.csvFormats.CSVToTransaction;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TransactionHandler implements TransactionAPI {
     private TransactionDAO dao;
-
     private AccountDAO accountDAO;
     private CategoryDAO categoryDAO;
+
+    private UserDAO userDAO;
 
     public TransactionHandler(TransactionDAO transactionDAO){
         this.dao = transactionDAO;
@@ -78,13 +80,25 @@ public class TransactionHandler implements TransactionAPI {
         if(account.isEmpty()){
             throw new PersistenceException("Account ID passed in does not exist in database");
         }
+        Map<String, CategoryDTO> categoryMap = createCategoryMap(account.get().getUser());
         List<TransactionDTO> dtos = CSVToTransaction.createTransactionsFromCSV(
-                csv.toString(), account.get(), request.getCurrencyCode(), new HashMap<>());
+                csv.toString(), account.get(), request.getCurrencyCode(), categoryMap);
         for(TransactionDTO dto : dtos){
             dto.setCategory(categoryDAO.findById(dto.getCategory().getCategory_id()).get());
         }
         dao.saveAll(dtos);
         return dtos;
+    }
+
+    private Map<String, CategoryDTO> createCategoryMap(UserDTO user) {
+        Map<String, CategoryDTO> categoryMap = new HashMap<>();
+        List<CategoryDTO> categoryList = categoryDAO.findCategoryDTOSByUser(user);
+
+        for(CategoryDTO cat : categoryList){
+            categoryMap.put(cat.getCategory_name(), cat);
+        }
+
+        return categoryMap;
     }
 
     @Override
