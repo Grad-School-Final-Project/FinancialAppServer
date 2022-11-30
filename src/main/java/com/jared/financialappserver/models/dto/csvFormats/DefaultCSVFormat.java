@@ -1,6 +1,5 @@
 package com.jared.financialappserver.models.dto.csvFormats;
 
-import com.jared.financialappserver.models.dao.CategoryDAO;
 import com.jared.financialappserver.models.dto.AccountDTO;
 import com.jared.financialappserver.models.dto.CategoryDTO;
 import com.jared.financialappserver.models.dto.TransactionDTO;
@@ -12,15 +11,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class ChaseCSVFormat implements CSVToTransaction{
+public class DefaultCSVFormat implements CSVToTransaction {
 
     @CsvDate(value = "MM/dd/yyyy")
-    @CsvBindByName(column = "Transaction Date")
+    @CsvBindByName(column = "Date")
     private LocalDate transactionDate;
-
-    @CsvDate(value = "MM/dd/yyyy")
-    @CsvBindByName(column = "Post Date")
-    private LocalDate postDate;
 
     @CsvBindByName(column = "Description")
     private String description;
@@ -28,14 +23,11 @@ public class ChaseCSVFormat implements CSVToTransaction{
     @CsvBindByName(column = "Category")
     private String category;
 
-    @CsvBindByName(column = "Type")
-    private String type;
-
     @CsvBindByName(column = "Amount")
     private BigDecimal amount;
 
-    @CsvBindByName(column = "Memo")
-    private String memo;
+    @CsvBindByName(column = "Notes")
+    private String notes;
 
     @Override
     public TransactionDTO createTransaction(
@@ -43,14 +35,14 @@ public class ChaseCSVFormat implements CSVToTransaction{
             String currency,
             Map<String, CategoryDTO> categoryMap) {
         CategoryDTO categoryToSet = CategoryDTO.getUncategorizedCategory();
-        if(categoryMap.get(category) != null){
+        if (categoryMap.get(category) != null) {
             categoryToSet = categoryMap.get(category);
         }
 
         return TransactionDTO.builder()
                 .amount(amount)
                 .associatedAccount(accountDTO)
-                .notes(memo)
+                .notes(notes)
                 .currency(currency)
                 .date(Date.valueOf(transactionDate))
                 .description(description)

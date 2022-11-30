@@ -63,7 +63,7 @@ public class BudgetHandler implements BudgetAPI {
         Month month = request.getMonth();
         Map<Integer, Double> budgetMap = new HashMap<>();
         for(BudgetDTO budget : budgetDTOs){
-            TransactionHandler tHandler = new TransactionHandler(transactionDAO, null, categoryDAO);
+            TransactionHandler tHandler = new TransactionHandler(transactionDAO, null, categoryDAO, userDAO);
             List<TransactionDTO> transactionDTOs = tHandler.getBudgetTransactions(budget);
             transactionDTOs = transactionDTOs.stream().filter(t -> t.getDate().toLocalDate().getMonth() == month).collect(Collectors.toList());
 

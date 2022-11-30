@@ -1,5 +1,6 @@
 package com.jared.financialappserver.apis.handlers;
 
+import com.jared.financialappserver.apis.controllers.HelloWorldController;
 import com.jared.financialappserver.models.dao.StockDAO;
 import com.jared.financialappserver.models.dao.StockDataDAO;
 import com.jared.financialappserver.models.dto.StockDTO;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.james.mime4j.field.datetime.DateTime;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +33,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class StockDataHandler {
 
+    private static final Logger logger = LogManager.getLogger(StockDataHandler.class);
     StockDataDAO stockDataDAO;
 
     public double getCurrentStockPrice(StockDTO stock)
@@ -62,14 +66,15 @@ public class StockDataHandler {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
+        logger.debug("FinHub response: " + response);
         if(response.statusCode() != 200)
         {
             throw new IOException("Bad response code");
         }
-
+        logger.debug("Response body: " + response.body());
         JSONObject object = new JSONObject(response.body());
         BigDecimal currentPrice = (BigDecimal) object.get("c");
+        logger.debug("Current price: " + stock.getTicker() + ":" + currentPrice);
         int time = (Integer) object.get("t");
 
         return StockDataDTO.builder()

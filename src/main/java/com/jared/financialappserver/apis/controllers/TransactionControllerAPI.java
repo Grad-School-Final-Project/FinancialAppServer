@@ -7,6 +7,7 @@ import com.jared.financialappserver.apis.requests.transactionAPI.UpdateTransacti
 import com.jared.financialappserver.models.dao.AccountDAO;
 import com.jared.financialappserver.models.dao.CategoryDAO;
 import com.jared.financialappserver.models.dao.TransactionDAO;
+import com.jared.financialappserver.models.dao.UserDAO;
 import com.jared.financialappserver.models.dto.AccountDTO;
 import com.jared.financialappserver.models.dto.BudgetDTO;
 import com.jared.financialappserver.models.dto.TransactionDTO;
@@ -31,12 +32,15 @@ public class TransactionControllerAPI implements TransactionAPI {
     @Autowired
     private AccountDAO accountDAO;
 
+    @Autowired
+    private UserDAO userDAO;
+
     @Override
     @PostMapping("createTransaction")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public TransactionDTO createTransaction(@RequestBody TransactionDTO transaction) {
 //        KeycloakUtil.verifyRequest(SecurityContextHolder.getContext().getAuthentication(), transaction.getAssociatedAccount().getUser());
-        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO, userDAO);
         return handler.createTransaction(transaction);
     }
 
@@ -49,7 +53,7 @@ public class TransactionControllerAPI implements TransactionAPI {
                     SecurityContextHolder.getContext().getAuthentication(),
                     transaction.getAssociatedAccount().getUser());
         }
-        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO, userDAO);
         return handler.createTransactions(transactions);
     }
 
@@ -58,7 +62,7 @@ public class TransactionControllerAPI implements TransactionAPI {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<TransactionDTO> createTransactionsFromCSV(@RequestBody CreateTransactionsFromCSVRequest request) {
 //        KeycloakUtil.verifyRequest(SecurityContextHolder.getContext().getAuthentication(), request.getAccount().getUser());
-        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO, userDAO);
         return handler.createTransactionsFromCSV(request);
     }
 
@@ -78,7 +82,7 @@ public class TransactionControllerAPI implements TransactionAPI {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public TransactionDTO updateTransaction(@RequestBody UpdateTransactionRequest request) {
         //        KeycloakUtil.verifyRequest(SecurityContextHolder.getContext().getAuthentication(), user);
-        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO);
+        TransactionHandler handler = new TransactionHandler(transactionDAO, accountDAO, categoryDAO, userDAO);
         return handler.updateTransaction(request);
     }
 
