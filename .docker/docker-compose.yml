@@ -32,3 +32,4 @@ services:
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
       - KEYCLOAK_SERVER=http://keycloak:${KEYCLOAK_PORT}
       - PORT=${PORT}
+      - FINHUB_API_KEY=${FINHUB_API_KEY}
