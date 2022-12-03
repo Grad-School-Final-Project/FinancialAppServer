@@ -21,6 +21,8 @@ services:
       - postgresDB
       - keycloak
     image: hamjared/financialapp:master
+    ports:
+      - "${PORT}:${PORT}"
     environment:
       - DB_HOST=postgresDB
       - DB_NAME=${DB_NAME}
@@ -30,6 +32,27 @@ services:
       - KEYCLOAK_CLIENT=${KEYCLOAK_CLIENT}
       - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
-      - KEYCLOAK_SERVER=http://keycloak:${KEYCLOAK_PORT}
+      - KEYCLOAK_SERVER=http://keycloak:8080
       - PORT=${PORT}
       - FINHUB_API_KEY=${FINHUB_API_KEY}
+      - INITIALIZE_SCHEMA=${INITIALIZE_SCHEMA}
+  client:
+    depends_on:
+      - postgresDB
+      - keycloak
+      - springServer
+    image: hamjared/financialappclient:master
+    ports:
+      - 3000:3000
+  pgadmin:
+    depends_on:
+      - postgresDB
+      - keycloak
+      - springServer
+    image: dpage/pgadmin4
+    ports:
+      - 80:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+
